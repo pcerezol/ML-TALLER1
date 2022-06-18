@@ -1,0 +1,2 @@
+
+install.packages(c("tidyverse","skimr","haven","rio","e1071","EnvStats","tidymodels", "ggplot2", "scales","ggpubr","knit", "rvest",  "kableExtra"))
