@@ -9,8 +9,11 @@
 
 #Cargamos los paquetes necesarios----------------------
 install.packages("rvest")
+install.packages("dplyr")
+library(dplyr)
 library(rvest) # Para scraping
 library(pacman)
+library(tidyverse)
 p_load(rio) # Librer??a para importar datos 
 p_load(tidyverse) # Librer??a para limpiar datos
 p_load(e1071) # Tiene la funci??n para calcular skewness
@@ -41,13 +44,34 @@ url_scraping <- "https://ignaciomsarmiento.github.io/GEIH2018_sample/page1.html"
 geih <- data.frame()
 for (i in 1:10) {
   url <- paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_", i,".html")
-  temp <- readl_html(url) %>% 
+  temp <- read_html(url) %>% 
     html_table()
   geih <- rbin(geih, temp)
   }
 
+geih <- data.frame()
+
+  url <- paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_1.html")
+  temp <- read_html(url) %>% 
+    html_table()
+  geih <- rbin(geih, temp)
 
 
+for (i in 1:10){
+temp <- read_html(paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_",i,".html"))%>%
+html_table()
+geih <- data.frame()
+geih <- temp
+rbind.data.frame(geih)
+}
 
-
-
+  geih <- data.frame() 
+  for (i in 1:2){
+    temp <- read_html(paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_",i,".html"))%>%
+    html_table()
+    geih <- temp
+    rbind(geih)
+  }
+  summary(geih)
+  skim(geih)
+  
