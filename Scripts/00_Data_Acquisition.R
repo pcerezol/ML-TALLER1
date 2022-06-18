@@ -23,8 +23,6 @@ p_load(knitr) # Tablas dentro de Rmarkdown
 p_load(kableExtra) # Tablas dentro de Rmarkdown
 p_load(rvest)
 
-#Definimos el escritorio-------------------------------
-setwd("C:/Users/pcere/Dropbox/Machine Learning/ML-TALLER1")
 
 #Limpiamos todo pos si las moscas ---------------------
 rm(list = ls())
