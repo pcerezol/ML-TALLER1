@@ -39,7 +39,7 @@ for (x in 1:10){
     GEIH_ocupados<-data.frame()
     GEIH_ocupados<-subset(GEIH, age>=18 & ocu==1)
     #dejamos variables de interés
-    ##    GEIH_ocupados <- GEIH_ocupados %>%
+    GEIH_ocupados <- GEIH_ocupados %>%
     mutate(age2 = age^2,
            age_sex = age*sex,
            age_sex2 = age2*sex,
@@ -51,7 +51,8 @@ for (x in 1:10){
     GEIH_clean <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2, 
                                                     age_sex, age_sex2, formal,
                                                     relab,maxEducLevel, depto,
-                                                    clase, p6426))
+                                                    clase, p6426, ln_Ing, formal_sex,
+                                                    realb_sex))
 ##Base para el punto 3
 
     GEIH_punto3 <- subset(GEIH_ocupados, select = c (age, age2, ingtot))
