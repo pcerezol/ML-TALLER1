@@ -23,10 +23,16 @@ library(pacman)
 library(dplyr)
 
 #Cargamos la data--------------------------------------
-geih <- data.frame() 
-    temp <- read_html(paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_1.html"))%>%
+geih <- data.frame()
+for (x in 1:10){
+  url <-paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_1.html")
+  temp <- read_html(url)%>%
+  html_table()  
+  geih <- temp
+  GEIH <- as.data.frame(geih)
+  }
+    geih <- read_html("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_1.html")%>%
     html_table()
-    geih <- temp
 
 
 #2.1 Variables de interés------------------------------
