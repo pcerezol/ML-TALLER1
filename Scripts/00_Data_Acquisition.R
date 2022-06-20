@@ -39,39 +39,20 @@ rm(list = ls())
 ####################################################
 
 #cargamos el url--------------------------------------
-url_scraping <- "https://ignaciomsarmiento.github.io/GEIH2018_sample/page1.html"
-
-geih <- data.frame()
-for (i in 1:10) {
-  url <- paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_", i,".html")
-  temp <- read_html(url) %>% 
-    html_table()
-  geih <- rbin(geih, temp)
-  }
-
-geih <- data.frame()
-
-  url <- paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_1.html")
-  temp <- read_html(url) %>% 
-    html_table()
-  geih <- rbin(geih, temp)
-
-
+rm(list = ls())
+#Cargamos los paquetes necesarios----------------------
+library(tidyverse)
+library(rvest)
+library(pacman)
+library(dplyr)
+library(readr, warn.conflicts = FALSE)
+#Cargamos la data--------------------------------------
+GEIH <- data.frame()
 for (i in 1:10){
-temp <- read_html(paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_",i,".html"))%>%
-html_table()
-geih <- data.frame()
-geih <- temp
-rbind.data.frame(geih)
+  url <-paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_",i,".html")
+  temp <- read_html(url)%>%
+    html_table()  
+  temp <- as.data.frame(temp)
+  GEIH <- rbind(GEIH,temp)
 }
-
-  geih <- data.frame() 
-  for (i in 1:2){
-    temp <- read_html(paste0("https://ignaciomsarmiento.github.io/GEIH2018_sample/pages/geih_page_",i,".html"))%>%
-    html_table()
-    geih <- temp
-    rbind(geih)
-  }
-  summary(geih)
-  skim(geih)
   
