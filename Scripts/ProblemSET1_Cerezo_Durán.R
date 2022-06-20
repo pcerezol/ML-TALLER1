@@ -2,14 +2,15 @@
 
 #Problem Set 1: Predicting Income#
 
-# Authors: Pablo Cerezo Lesmes & Juan Sebasti??n Dur??n Dur??n
+# Authors: Pablo Cerezo Lesmes & Juan Sebastián Durán Durán
+
 ######################################################
 
 # 1.a Scrape the data at the website #
 
 ####################################################
 
-#cargamos el url--------------------------------------
+#limpiamos---------------------------------------------
 rm(list = ls())
 #Cargamos los paquetes necesarios----------------------
 library(tidyverse)
@@ -26,3 +27,44 @@ for (i in 1:10){
   temp <- as.data.frame(temp)
   GEIH <- rbind(GEIH,temp)
 }
+#Fin del scraping
+
+
+
+######################################################
+
+# 2. Data cleaning #
+
+####################################################
+
+#2.1 Variables de interés------------------------------
+
+#Dejamos mayores de edad y trabajadores
+
+GEIH_ocupados<-data.frame()
+GEIH_ocupados<-subset(GEIH, age>=18 & ocu==1)
+
+#Creamos interacciones de variables de interés
+
+GEIH_ocupados <- GEIH_ocupados %>%
+  mutate(age2 = age^2,
+         age_sex = age*sex,
+         age_sex2 = age2*sex,
+         log_Ing = log(ingtot),
+         formal_sex = formal*sex,
+         realb_sex = relab*sex,
+  )
+
+#Creamos el df con las variables de interés
+
+GEIH_clean <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2, 
+                                                age_sex, age_sex2, formal,
+                                                relab,maxEducLevel, depto,
+                                                clase, p6426, log_Ing, formal_sex,
+                                                realb_sex))
+#Creamos años de educación según máximo nivel educativo alcanzado
+GEIH_clean <- GEIH_clean %>%
+  mutate(años_educ=0
+  )
+
+#fin limpieza de la base

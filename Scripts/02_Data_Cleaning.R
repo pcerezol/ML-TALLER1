@@ -4,9 +4,8 @@
 
 # Authors: Pablo Cerezo Lesmes & Juan Sebasti??n Dur??n Dur??n
 ######################################################
-#Por la fecha, el scraping se hizo siguiendo esta p??gina: https://datanalytics.com/libro_r/web-scraping.html
+
 # 02. Data cleanning #
-rm(list = ls())
 #Cargamos los paquetes necesarios----------------------
 library(rio)
 library(tidyverse)
@@ -47,7 +46,7 @@ for (x in 1:10){
            ln_Ing = ln(ingtot),
            formal_sex = formal*sex,
            realb_sex = relab*sex,
-           maxEducLevel)
+           )
     
     GEIH_clean <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2, 
                                                     age_sex, age_sex2, formal,
