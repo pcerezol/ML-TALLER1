@@ -62,7 +62,7 @@ GEIH_clean <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2,
                                                 relab,maxEducLevel, depto,
                                                 clase, p6426, log_Ing, formal_sex,
                                                 realb_sex))
-#Creamos años de educación según máximo nivel educativo alcanzado
+
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 4] <- 5
