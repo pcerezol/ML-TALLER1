@@ -40,21 +40,25 @@ for (x in 1:10){
     GEIH_ocupados<-data.frame()
     GEIH_ocupados<-subset(GEIH, age>=18 & ocu==1)
     #dejamos variables de interés
-    ##
-    GEIH_final <- subset(GEIH_ocupados, select = c (sex, age, ingtot, ))
-
+    ##    GEIH_ocupados <- GEIH_ocupados %>%
+    mutate(age2 = age^2,
+           age_sex = age*sex,
+           age_sex2 = age2*sex,
+           ln_Ing = ln(ingtot),
+           formal_sex = formal*sex,
+           realb_sex = relab*sex,
+           maxEducLevel)
+    
+    GEIH_clean <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2, 
+                                                    age_sex, age_sex2, formal,
+                                                    relab,maxEducLevel, depto,
+                                                    clase, p6426))
 ##Base para el punto 3
-    GEIH_ocupados <- GEIH_ocupados %>%
-    mutate(age2 =age^2,
-           age_sex =age*sex,
-           age_sex2 = age2*sex)
+
     GEIH_punto3 <- subset(GEIH_ocupados, select = c (age, age2, ingtot))
 
 ##Base para el punto 4
-    GEIH_punto4 <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2, 
-                                                     age_sex, age_sex2, relab,
-                                                     maxEducLevel))
-    
+
     ##Base para el punto 5
 #2.2 Missing variables---------------------------------
 
