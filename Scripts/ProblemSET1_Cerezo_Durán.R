@@ -89,9 +89,24 @@ summary(GEIH_clean$educ2)
 
 
 
+#3.1 Peak age by bootstrap
+install.packages("boot")
+library(boot)
+#creamos una función para las estadísticas
+#con las que haremos bootstrap
+SE <- function(GEIH_clean, index,
+               age_bar=mean(GEIH_clean$ingtot)){
+  f<-lm(ingtot~age+age2,GEIH_clean,subset = index)
+  coefs<-f$coefficients
+  b2<-coefs[2]
+  b3<-coefs[3]
+  elastpt<-b2+2*b3*age_bar
+  return(elastpt)
+}
+               
+                                                  
 
-
-
+boot(data=GEIH_clean, SE, R=1000)
 
 
 ######################################################
