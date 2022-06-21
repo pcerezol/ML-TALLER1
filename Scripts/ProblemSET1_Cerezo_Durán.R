@@ -57,22 +57,21 @@ GEIH_ocupados <- GEIH_ocupados %>%
 
 #Creamos el df con las variables de interés
 
-GEIH_clean <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2, 
+GEIH_clean <- subset(GEIH_ocupados, select = c ( Var.1, dominio, sex, ingtot, age, age2, 
                                                 age_sex, age_sex2, formal,
                                                 relab,maxEducLevel, depto,
                                                 clase, p6426, log_Ing, formal_sex,
                                                 realb_sex))
 
-<<<<<<< Updated upstream
+
 #creamos tiempo de estudio de la persona de acuerdo con el
 # nivel de educación alcanzado
 
-GEIH_clean <- GEIH_clean %>% 
-=======
+
 ###para remplazar los datos de una teniendo en cuenta otra variable GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
 
 GEIH_clean <- GEIH_clean  %>% 
->>>>>>> Stashed changes
+
   mutate(educ=0)
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
@@ -81,7 +80,7 @@ GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 5] <- 10
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 6] <- 11
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 7] <- 15
 
-<<<<<<< Updated upstream
+
 #Creamos educ al cuadrado
   GEIH_clean <- GEIH_clean  %>% 
   mutate(educ2=educ^2)
@@ -128,7 +127,7 @@ GEIH_clean<-GEIH_clean%>%
 # 5. Predicting earnings#
 
 ######################################################
-=======
+
 
 
 ######################################################

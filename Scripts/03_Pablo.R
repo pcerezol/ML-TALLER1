@@ -18,6 +18,12 @@ boot(data=GEIH_clean, SE, R=1000)
 
 # 4. The earnings #
 
+#Creamos educ al cuadrado
+GEIH_clean <- GEIH_clean  %>% 
+  mutate(educ2=educ^2)
+
+summary(GEIH_clean$educ2)
+
 ######################################################
 library(tidyverse)
 GEIH_clean<-GEIH_clean%>%
