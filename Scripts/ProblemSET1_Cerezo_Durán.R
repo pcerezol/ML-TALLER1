@@ -105,10 +105,12 @@ vardesc <- c("sex","ingtot","age","formal","clase","educ")
 tabla1 <- CreateTableOne(data = GEIH_clean, vars = vardesc)
 tabla1
 
+install.packages("writexl")
+library(writexl)
 
-CreateTableOne(data = GEIH_clean, vars = vardesc)
+####para sacar la tabla en excel
 
-
+#write_xlsx(tabla1,"tabla1.xlsx")
 
 #fin limpieza de la base
 
