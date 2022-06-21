@@ -6,6 +6,12 @@
 
 ######################################################
 
+
+#Es posible que requieran instalar officer y flextables para exportar a word o excel
+# install.packages("officer", "flextable", "openxlsx")
+#quick_docx(tabla_regs, file = "out/tabla_regs.docx"
+
+
 # 1.a Scrape the data at the website #
 
 ####################################################
@@ -18,6 +24,7 @@ library(rvest)
 library(pacman)
 library(dplyr)
 library(readr, warn.conflicts = FALSE)
+library(broom)
 #Cargamos la data--------------------------------------
 GEIH <- data.frame()
 for (i in 1:10){
@@ -87,11 +94,56 @@ GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 7] <- 15
   
 summary(GEIH_clean$educ2)
 
+#### estadísticas descriptivas
+
+
+install.packages("tableone")
+library(tableone)
+
+vardesc <- c("sex","ingtot","age","formal","clase","educ")
+
+tabla1 <- CreateTableOne(data = GEIH_clean, vars = vardesc)
+tabla1
+
+install.packages("writexl")
+library(writexl)
+
+####para sacar la tabla en excel
+
+#write_xlsx(tabla1,"tabla1.xlsx")
+
 #fin limpieza de la base
 
 
 
 
+# 3.  Age-earnings profile
+
+####################################################
+
+##### se realiza el primer modelo
+
+modelo1 <- lm(ingtot ~ age + age2,
+              data = GEIH_clean) 
+#### primer resumen de los valores que se generaron
+
+summary(modelo1)
+install.packages("huxtable")
+
+library(huxtable)
+huxreg(modelo1)
+
+install.packages("ggplot2")
+library(ggplot2)
+predict(modelo1)
+
+
+#### se crea el valor predicho del ingreso total es decir el "y gorro"
+
+GEIH_clean <- GEIH_clean %>%
+  mutate(ingtotpr = predict(modelo1))
+
+ggplot(GEIH_clean, aes(x=age, y=ingtotpr))+geom_point() + geom_smooth(method = "lm")
 
 
 
@@ -132,31 +184,7 @@ GEIH_clean<-GEIH_clean%>%
 
 ######################################################
 
-# 3.  Age-earnings profile
-
-####################################################
-
-
-modelo1 <- lm(ingtot ~ age + age2,
-              data = GEIH_clean) 
-summary(modelo1)
-install.packages("huxtable")
-
-library(huxtable)
-huxreg(modelo1)
-
-install.packages("ggplot2")
-library(ggplot2)
-predict(modelo1)
-
-
-#### se crea el valor predicho del ingreso total es decir el "y gorro"
-
-GEIH_clean <- GEIH_clean %>%
-  mutate(ingtotpr = predict(modelo1))
-
-ggplot(GEIH_clean, aes(x=age, y=ingtotpr))+geom_point() + geom_smooth(method = "lm")
 
 
 #fin limpieza de la base
->>>>>>> Stashed changes
+
