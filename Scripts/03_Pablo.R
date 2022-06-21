@@ -6,13 +6,9 @@ library(boot)
 #creamos una función para las estadísticas
 #con las que haremos bootstrap
 SE <- function(GEIH_clean, index){
-  coef(lm(ingtot~age+age2, data=GEIH_clean, subset =  index))
+  coef(lm(ingtot~age+age2, data=GEIH_clean, subset = index))
 }
-
-
-
 boot(data=GEIH_clean, SE, R=1000)
-
 
 ######################################################
 
