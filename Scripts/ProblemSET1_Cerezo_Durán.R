@@ -63,10 +63,16 @@ GEIH_clean <- subset(GEIH_ocupados, select = c (sex, ingtot, age, age2,
                                                 clase, p6426, log_Ing, formal_sex,
                                                 realb_sex))
 
+<<<<<<< Updated upstream
 #creamos tiempo de estudio de la persona de acuerdo con el
 # nivel de educación alcanzado
 
 GEIH_clean <- GEIH_clean %>% 
+=======
+###para remplazar los datos de una teniendo en cuenta otra variable GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
+
+GEIH_clean <- GEIH_clean  %>% 
+>>>>>>> Stashed changes
   mutate(educ=0)
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
@@ -75,6 +81,7 @@ GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 5] <- 10
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 6] <- 11
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 7] <- 15
 
+<<<<<<< Updated upstream
 #Creamos educ al cuadrado
   GEIH_clean <- GEIH_clean  %>% 
   mutate(educ2=educ^2)
@@ -121,3 +128,36 @@ boot(data=GEIH_clean, SE, R=1000)
 # 5. Predicting earnings#
 
 ######################################################
+=======
+
+
+######################################################
+
+# 3.  Age-earnings profile
+
+####################################################
+
+
+modelo1 <- lm(ingtot ~ age + age2,
+              data = GEIH_clean) 
+summary(modelo1)
+install.packages("huxtable")
+
+library(huxtable)
+huxreg(modelo1)
+
+install.packages("ggplot2")
+library(ggplot2)
+predict(modelo1)
+
+
+#### se crea el valor predicho del ingreso total es decir el "y gorro"
+
+GEIH_clean <- GEIH_clean %>%
+  mutate(ingtotpr = predict(modelo1))
+
+ggplot(GEIH_clean, aes(x=age, y=ingtotpr))+geom_point() + geom_smooth(method = "lm")
+
+
+#fin limpieza de la base
+>>>>>>> Stashed changes
