@@ -21,7 +21,7 @@ for (i in 1:10){
 
 GEIH_ocupados<-data.frame()
 GEIH_ocupados<-subset(GEIH, age>=18 & ocu==1 & ingtot>0)
-GEIH_clean<-GEIH_clean[complete.cases(GEIH_clean$ingtot),]
+
 #Creamos interacciones de variables de interés
 
 GEIH_ocupados <- GEIH_ocupados %>%
@@ -51,21 +51,22 @@ GEIH_clean <- subset(GEIH_ocupados, select = c ( dominio, ingtot, age, age2,
                                                  relab,maxEducLevel, depto,
                                                  clase, p6426, log_Ing, formal_sex,
                                                  realb_sex, educ, educ2,female ))
-
-
+#limpiamos NA
+GEIH_clean[complete.cases(GEIH_clean),]
 #PUNTO 3 
 
 #3.1 Peak age by bootstrap
 install.packages("boot")
 library(boot)
-modelo1<-lm(ingtot~age+age2, GEIH_clean)
-sumary(modelo1)
-#creamos una función para las estadísticas
-#con las que haremos bootstrap
 SE <- function(GEIH_clean, index){
   coef(lm(ingtot~age+age2, data=GEIH_clean, subset = index))
 }
 boot(data=GEIH_clean, SE, R=1000)
+modelo1<-lm(ingtot~age+age2, GEIH_clean)
+summary(modelo1)
+#creamos una función para las estadísticas
+#con las que haremos bootstrap
+
 
 ######################################################
 
