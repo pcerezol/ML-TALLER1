@@ -38,7 +38,7 @@ GEIH_ocupados['educ'][GEIH_ocupados['maxEducLevel'] == 4] <- 5
 GEIH_ocupados['educ'][GEIH_ocupados['maxEducLevel'] == 5] <- 10
 GEIH_ocupados['educ'][GEIH_ocupados['maxEducLevel'] == 6] <- 11
 GEIH_ocupados['educ'][GEIH_ocupados['maxEducLevel'] == 7] <- 15
-GEIH_ocupdos['female'][GEIH_ocupados['female'] == 2] <- 0
+GEIH_ocupados['female'][GEIH_ocupados['female'] == 2] <- 0
 
 GEIH_ocupados <- GEIH_ocupados %>%
 mutate(educ2=educ^2,
