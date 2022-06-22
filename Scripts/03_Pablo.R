@@ -58,14 +58,14 @@ GEIH_clean <- subset(GEIH_ocupados, select = c ( dominio, ingtot, age, age2,
 #3.1 Peak age by bootstrap
 install.packages("boot")
 library(boot)
-modelo1<-lm(iSE <- function(GEIH_clean, index){
-  coef(lm(ingtot~age+age2, data=GEIH_clean, subset = index))
-}
-boot(data=GEIH_clean, SE, R=1000)ngtot~age+age2, GEIH_clean)
-summary(modelo1)
+modelo1<-lm(ingtot~age+age2, GEIH_clean)
+sumary(modelo1)
 #creamos una función para las estadísticas
 #con las que haremos bootstrap
-
+SE <- function(GEIH_clean, index){
+  coef(lm(ingtot~age+age2, data=GEIH_clean, subset = index))
+}
+boot(data=GEIH_clean, SE, R=1000)
 
 ######################################################
 
