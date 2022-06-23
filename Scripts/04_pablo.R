@@ -3,10 +3,12 @@
 
 
 #Punto 4
+install.packages("huxtable")
+library(huxtable)
 
 modelo2<-lm(log_Ing~female, data=GEIH_clean)
 summary(modelo2)
-
+huxreg(modelo2)
 
 #############Bootstrap
 
@@ -46,3 +48,4 @@ boot(data=GEIH_fem, SE2_fem, R=1000)
 
 modelo3<-lm(log_Ing~female+age+relab+formal+educ+p6426, data=GEIH_clean)
 summary(modelo3)
+huxreg(modelo3)
