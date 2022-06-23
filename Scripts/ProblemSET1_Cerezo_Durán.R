@@ -108,6 +108,53 @@ tabla1
 install.packages("writexl")
 library(writexl)
 
+
+#####se le agrega etiqueta a la variable female
+
+levels(GEIH_clean$female) <- list("0" = "Hombre",
+                                  "1" = "Mujer")
+
+levels(GEIH_clean$educ) <- list("0" = "Ninguno",
+                                "4" = "Primaria_inc",
+                                "5" = "Primaria_com",
+                                "10" = "Secundaria_inc",
+                                "11" = "Secundaria_com",
+                                "15" = "Educacion_sup")
+
+###################################################
+############    Gráficas      ######################
+
+####### Gráfica de barras para el género
+
+ggplot(GEIH_clean, aes(x=female)) + geom_bar(width=0.5, colour="red", fill="skyblue")
++ labs(x= female,y= Frecuencia)  + ylim(c(0,10000)) +  ggtitle("Género")  + theme_bw(base_size = 20) + 
+  geom_text(aes(label=..count..), stat='count',position=position_dodge(1), 
+            vjust=-0.5, 
+            size=5.0) +   scale_fill_discrete(name = "female", labels = c("Mujer", "Hombre")) 
+ 
+######Gráfica para educación
+
+#### primero se crea una tabla con los valores 
+
+table(GEIH_clean$educ)
+
+###### luego se genera el gráfico
+
+
+as.factor(GEIH_clean$educ)
+ggplot(GEIH_clean, aes(x= educ)) + geom_bar(width=0.5, colour="red", fill="skyblue") + 
+  geom_text(aes(label=..count..), stat='count',position=position_dodge(0.9), vjust=-0.5,  size=5.0) 
+  
+
+
+ 
+ ##### para contar cuantos elementos tiene cada
+ 
+ data.frame(table(GEIH_clean$female))
+ data.frame(table(GEIH_clean$educ))
+ 
+ table(GEIH_clean$educ)
+ 
 ####para sacar la tabla en excel
 
 #write_xlsx(tabla1,"tabla1.xlsx")
@@ -143,7 +190,12 @@ predict(modelo1)
 GEIH_clean <- GEIH_clean %>%
   mutate(ingtotpr = predict(modelo1))
 
-ggplot(GEIH_clean, aes(x=age, y=ingtotpr))+geom_point() + geom_smooth(method = "lm")
+ggplot(GEIH_clean, aes(x=age, y=predict(modelo1))) + geom_point() 
++ labs(x='Ingresos', y='Edad', title ='Gráfico 1') + geom_point(col = "yellow", size = 0.5 ) 
+
+
+
+
 
 
 
