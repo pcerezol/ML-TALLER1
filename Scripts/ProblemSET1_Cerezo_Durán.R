@@ -100,7 +100,17 @@ summary(GEIH_clean$educ2)
 install.packages("tableone")
 library(tableone)
 
-vardesc <- c("sex","ingtot","age","formal","clase","educ")
+vardesc <- c("sex","ingtot","age","formal","clase","educ","p6426", "relab")
+
+GEIH_clean <- GEIH_clean %>%
+  rename(tiempo_tra = p6426, tipo_ocu  = relab, urbano = clase)
+
+summary(GEIH_clean)
+
+skim(GEIH_clean)
+
+install.packages("skim")
+library(skimr)
 
 tabla1 <- CreateTableOne(data = GEIH_clean, vars = vardesc)
 tabla1
@@ -124,6 +134,10 @@ levels(GEIH_clean$educ) <- list("0" = "Ninguno",
 ###################################################
 ############    Gráficas      ######################
 
+install.packages("ggplot2")
+library(ggplot2)
+
+
 ####### Gráfica de barras para el género
 
 ggplot(GEIH_clean, aes(x=female)) + geom_bar(width=0.5, colour="red", fill="skyblue")
@@ -140,12 +154,45 @@ table(GEIH_clean$educ)
 
 ###### luego se genera el gráfico
 
+#### GRáfica de Educación
+
 
 as.factor(GEIH_clean$educ)
-ggplot(GEIH_clean, aes(x= educ)) + geom_bar(width=0.5, colour="red", fill="skyblue") + 
-  geom_text(aes(label=..count..), stat='count',position=position_dodge(0.9), vjust=-0.5,  size=5.0) 
-  
 
+####Preguntar como se puede poner dos varibles en una misma gráfica que me muestre por sexo esta variable de educación
+
+ggplot(GEIH_clean, aes(x= as.factor(educ), fill = sex )) + geom_bar(width=0.5, colour="red", fill="skyblue") + 
+  geom_text(aes(label=..count..), stat='count',position=position_dodge(0.9), vjust=-0.5,  size=5.0) 
+
+### GRáfica de sexo
+####preguntar como se puede cambiar los nombres de abajo
+
+ggplot(GEIH_clean, aes(x= as.factor(sex))) + geom_bar(width=0.5, colour="red", fill="skyblue") + 
+  geom_text(aes(label=..count..), stat='count',position=position_dodge(0.9), vjust=-0.5,  size=5.0) 
+
+
+
+##### tablas cruzadas
+
+#######paquete de estadísticas descriptivas
+
+
+install.packages("descr")
+library(descr)
+
+##### tablas cruzadas y gráfico
+
+  crosstab(GEIH_clean$educ, GEIH_clean$sex, prop.c = TRUE)
+
+#### saca estadísticas descriptivas tambien
+  
+descr(GEIH_clean$ingtot)
+
+####GRáfica de ingresos
+
+### preguntar como se puede hacer un zoom
+
+ggplot(GEIH_clean, aes(x = ingtot)) + geom_histogram()
 
  
  ##### para contar cuantos elementos tiene cada
@@ -192,10 +239,6 @@ GEIH_clean <- GEIH_clean %>%
 
 ggplot(GEIH_clean, aes(x=age, y=predict(modelo1))) + geom_point() 
 + labs(x='Ingresos', y='Edad', title ='Gráfico 1') + geom_point(col = "yellow", size = 0.5 ) 
-
-
-
-
 
 
 
