@@ -59,7 +59,8 @@ GEIH_clean[complete.cases(GEIH_clean),]
 install.packages("boot")
 library(boot)
 SE <- function(GEIH_clean, index){
-  coef(lm(ingtot~age+age2, data=GEIH_clean, subset = index))
+  Pablo <- lm(ingtot~age+age2, data=GEIH_clean[index, ])
+  coef(Pablo)
 }
 boot(data=GEIH_clean, SE, R=1000)
 modelo1<-lm(ingtot~age+age2, GEIH_clean)

@@ -5,18 +5,30 @@
 #Punto 4
 install.packages("huxtable")
 library(huxtable)
+library(boot)
 
+###############Corremos el modelo
 modelo2<-lm(log_Ing~female, data=GEIH_clean)
 summary(modelo2)
-huxreg(modelo2)
+#huxreg(modelo2)
 
 #############Bootstrap
 
 SE2 <- function(GEIH_clean, index){
-  coef(lm(log_Ing~female, data=GEIH_clean), data=GEIH_clean, subset = index)
+reg <- lm(log_Ing~female, data=GEIH_clean[index, ])
+  coef(reg)
 }
 boot(data=GEIH_clean, SE2, R=1000)
-summary(GEIH_clean$female)
+
+
+
+
+
+
+
+
+
+
 ###################
 #La base únicamente contiene información de Bogotá
 ##############
