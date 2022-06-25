@@ -68,12 +68,8 @@ mutate(Fem=  predict(lm(log_Ing~age, data=GEIH_fem)))
 #### se crea el valor predicho del ingreso total es decir el "y gorro"
 library("ggplot2")
 
-GEIH_clean <- GEIH_clean %>%
-  mutate(ingtotpr = predict(modelo1))
-ggplot(GEIH_clean, aes(x=age, y=predict(modelo2_mas))) + geom_point() 
-+ labs(x='Ingresos', y='Edad', title ='Grafico 2') + geom_point(col = "yellow", size = 0.5 ) 
-
-
+ggplot()+geom_point(data=GEIH_mas , aes(x=age, y=predict(modelo2_mas)), colours="#69b3a2")+
+geom_point(data=GEIH_fem , aes(x=age, y=predict(modelo2_fem)))
 
 ##################33
 
