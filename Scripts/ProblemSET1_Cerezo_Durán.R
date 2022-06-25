@@ -94,7 +94,7 @@ GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 7] <- 15
   
 summary(GEIH_clean$educ2)
 
-#### estadísticas descriptivas
+#### estad?sticas descriptivas
 
 
 install.packages("tableone")
@@ -132,39 +132,39 @@ levels(GEIH_clean$educ) <- list("0" = "Ninguno",
                                 "15" = "Educacion_sup")
 
 ###################################################
-############    Gráficas      ######################
+############    Gr?ficas      ######################
 
 install.packages("ggplot2")
 library(ggplot2)
 
 
-####### Gráfica de barras para el género
+####### Gr?fica de barras para el g?nero
 
 ggplot(GEIH_clean, aes(x=female)) + geom_bar(width=0.5, colour="red", fill="skyblue")
-+ labs(x= female,y= Frecuencia)  + ylim(c(0,10000)) +  ggtitle("Género")  + theme_bw(base_size = 20) + 
++ labs(x= female,y= Frecuencia)  + ylim(c(0,10000)) +  ggtitle("G?nero")  + theme_bw(base_size = 20) + 
   geom_text(aes(label=..count..), stat='count',position=position_dodge(1), 
             vjust=-0.5, 
             size=5.0) +   scale_fill_discrete(name = "female", labels = c("Mujer", "Hombre")) 
  
-######Gráfica para educación
+######Gr?fica para educaci?n
 
 #### primero se crea una tabla con los valores 
 
 table(GEIH_clean$educ)
 
-###### luego se genera el gráfico
+###### luego se genera el gr?fico
 
-#### GRáfica de Educación
+#### GR?fica de Educaci?n
 
 
 as.factor(GEIH_clean$educ)
 
-####Preguntar como se puede poner dos varibles en una misma gráfica que me muestre por sexo esta variable de educación
+####Preguntar como se puede poner dos varibles en una misma gr?fica que me muestre por sexo esta variable de educaci?n
 
 ggplot(GEIH_clean, aes(x= as.factor(educ), fill = sex )) + geom_bar(width=0.5, colour="red", fill="skyblue") + 
   geom_text(aes(label=..count..), stat='count',position=position_dodge(0.9), vjust=-0.5,  size=5.0) 
 
-### GRáfica de sexo
+### GR?fica de sexo
 ####preguntar como se puede cambiar los nombres de abajo
 
 ggplot(GEIH_clean, aes(x= as.factor(sex))) + geom_bar(width=0.5, colour="red", fill="skyblue") + 
@@ -174,21 +174,21 @@ ggplot(GEIH_clean, aes(x= as.factor(sex))) + geom_bar(width=0.5, colour="red", f
 
 ##### tablas cruzadas
 
-#######paquete de estadísticas descriptivas
+#######paquete de estad?sticas descriptivas
 
 
 install.packages("descr")
 library(descr)
 
-##### tablas cruzadas y gráfico
+##### tablas cruzadas y gr?fico
 
   crosstab(GEIH_clean$educ, GEIH_clean$sex, prop.c = TRUE)
 
-#### saca estadísticas descriptivas tambien
+#### saca estad?sticas descriptivas tambien
   
 descr(GEIH_clean$ingtot)
 
-####GRáfica de ingresos
+####GR?fica de ingresos
 
 ### preguntar como se puede hacer un zoom
 
@@ -233,12 +233,12 @@ predict(modelo1)
 
 
 #### se crea el valor predicho del ingreso total es decir el "y gorro"
-
+library("ggplot2")
 GEIH_clean <- GEIH_clean %>%
   mutate(ingtotpr = predict(modelo1))
 
 ggplot(GEIH_clean, aes(x=age, y=predict(modelo1))) + geom_point() 
-+ labs(x='Ingresos', y='Edad', title ='Gráfico 1') + geom_point(col = "yellow", size = 0.5 ) 
++ labs(x='Ingresos', y='Edad', title ='Grafico 1') + geom_point(col = "yellow", size = 0.5 ) 
 
 
 

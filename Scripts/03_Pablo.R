@@ -58,6 +58,7 @@ GEIH_clean[complete.cases(GEIH_clean),]
 #3.1 Peak age by bootstrap
 install.packages("boot")
 library(boot)
+
 SE <- function(GEIH_clean, index){
   Pablo <- lm(ingtot~age+age2, data=GEIH_clean[index, ])
   coef(Pablo)

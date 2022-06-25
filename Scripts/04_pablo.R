@@ -38,6 +38,7 @@ GEIH_fem<-subset(GEIH_clean, female==1)
 
 #regresión edad para hombres
 modelo2_mas <- lm(log_Ing~age, data=GEIH_mas)
+predict(modelo2_mas)
 summary(modelo2_mas)
 SE2_mas <- function(GEIH_mas, index){
   coef(lm(log_Ing~age, data=GEIH_mas), data=GEIH_mas, subset = index)
@@ -54,7 +55,27 @@ SE2_fem <- function(GEIH_fem, index){
 boot(data=GEIH_fem, SE2_fem, R=1000)
 
 
+###################
+library("tidyverse")
+library("dplyr")
+grafica_sexo<-data.frame()
+grafica_sexo<- GEIH_mas%>%{
+mutate(Fem=  predict(lm(log_Ing~age, data=GEIH_fem)))
+}
 
+###################
+
+#### se crea el valor predicho del ingreso total es decir el "y gorro"
+library("ggplot2")
+
+GEIH_clean <- GEIH_clean %>%
+  mutate(ingtotpr = predict(modelo1))
+ggplot(GEIH_clean, aes(x=age, y=predict(modelo2_mas))) + geom_point() 
++ labs(x='Ingresos', y='Edad', title ='Grafico 2') + geom_point(col = "yellow", size = 0.5 ) 
+
+
+
+##################33
 
 ##########4.5.4
 
