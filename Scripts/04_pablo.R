@@ -3,13 +3,17 @@
 
 
 #Punto 4
-install.packages("huxtable")
-library(huxtable)
-library(boot)
+install.packages("officer", "flextable", "openxlsx", "huxtable")
 
+library(officer)
+library(flextable)
+library(openxlsx)
+library(huxtable)
+library(dplyr)
 ###############Corremos el modelo
 modelo2<-lm(log_Ing~female, data=GEIH_clean)
 summary(modelo2)
+tabla_reg <-huxreg(modelo2)
 #huxreg(modelo2)
 
 #############Bootstrap
