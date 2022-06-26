@@ -297,13 +297,59 @@ GEIH_clean<-GEIH_clean%>%
 ######################################################
 data(GEIH_clean)
 
-set.seed{101010}
+set.seed(101010)
 
-indexSet <- sample(2, nrow(GEIH_clean), replace = T, prob = c(0.7, 0.3))
+GEIH_clean <- GEIH_clean %>% mutate(holdout= as.logical(1:nrow(GEIH_clean) %in%
+                        sample(nrow(GEIH_clean), nrow(GEIH_clean)*.3)))
+  
 
-train <- GEIH_clean[indexSet==1,]
-test <- GEIH_clean[indexSet==2,]
 
+test <- GEIH_clean[GEIH_clean$holdout==T,]
+train <- GEIH_clean[GEIH_clean$holdout==F,]
+
+###i. Estimate a model that only includes a constant. This will be the benchmark.
+
+y <- rnorm(1000)
+
+intercepto <- lm(y~1)
+
+
+#ii. Estimate again your previous models
+
+###primer modelo
+
+modelo1 <- lm(ingtot ~ age + age2,
+              data = GEIH_clean) 
+
+GEIH_clean<-GEIH_clean%>%
+  mutate(female=sex+1)
+summary(GEIH_clean$female)
+GEIH_clean['female'][GEIH_clean['female'] == 2] <- 0
+modelo2<-lm(log_Ing~female, data=GEIH_clean)
+GEIH_clean<-GEIH_clean%>%
+  mutate(log_Ing=log10(ingtot))
+
+modelo2 <- lm(log_Ing~female, data=GEIH_clean)
+
+install.packages("huxreg")
+library(huxtable)
+
+regresiones <- huxreg(intercepto, modelo1, modelo2)
+
+install.packages("officer")
+install.packages("flextable")
+library(officer)
+library(flextable)
+
+setwd("C:\Users\ASUS\OneDrive - Universidad de los Andes\Documentos\Respaldo\Escritorio")
+
+quick_docx(regresiones, file = "tabla_regs.docx")
+
+
+#iii. In the previous sections, the estimated models had different transformations of the dependent variable. At this point, explore other transformations of
+#your independent variables also. For example, you can include polynomial
+#terms of certain controls or interactions of these. Try at least five (5) models
+#that are increasing in complexity.
 
 ######################################################
 
