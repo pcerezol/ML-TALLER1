@@ -157,7 +157,7 @@ table(GEIH_clean$educ)
 #### GR?fica de Educaci?n
 
 
-as.factor(GEIH_clean$educ)
+factor(GEIH_clean$educ)
 
 ####Preguntar como se puede poner dos varibles en una misma gr?fica que me muestre por sexo esta variable de educaci?n
 
@@ -169,6 +169,29 @@ ggplot(GEIH_clean, aes(x= as.factor(educ), fill = sex )) + geom_bar(width=0.5, c
 
 ggplot(GEIH_clean, aes(x= as.factor(sex))) + geom_bar(width=0.5, colour="red", fill="skyblue") + 
   geom_text(aes(label=..count..), stat='count',position=position_dodge(0.9), vjust=-0.5,  size=5.0) 
+
+factor(GEIH_clean$educ)
+
+grafica <- GEIH_clean
+
+
+grafica <- add_labels(grafica$educ, labels = c( `Sin_educ`= 0, 
+                                                `Primaria_inc` = 4,
+                                                `Primaria_com` = 5,
+                                                `Secundaria_inc`= 10,
+                                                `Secundaria_com`= 11,
+                                                `Terciaria` = 15))
+
+grafica <- factor(c(0,4,5,10,11,15),labels=c("Ninguno", "Primaria_inc", "Primaria_com", "Secundaria_inc", "Secundaria_com", "Educacion_sup"))
+
+levels(GEIH_clean$educ) <- list("0" = "Ninguno",
+                                "4" = "Primaria_inc",
+                                "5" = "Primaria_com",
+                                "10" = "Secundaria_inc",
+                                "11" = "Secundaria_com",
+                                "15" = "Educacion_sup")
+
+gráfica['educ'][GEIH_clean['educ'] == 0] <- ""
 
 
 
@@ -249,9 +272,7 @@ library(boot)
 #con las que haremos bootstrap
 SE <- function(GEIH_clean, index){
   coef(lm(ingtot))
-}
-
-                                                  
+}                                         
 
 boot(data=GEIH_clean, SE, R=1000)
 
@@ -274,7 +295,14 @@ GEIH_clean<-GEIH_clean%>%
 # 5. Predicting earnings#
 
 ######################################################
+data(GEIH_clean)
 
+set.seed{101010}
+
+indexSet <- sample(2, nrow(GEIH_clean), replace = T, prob = c(0.7, 0.3))
+
+train <- GEIH_clean[indexSet==1,]
+test <- GEIH_clean[indexSet==2,]
 
 
 ######################################################
