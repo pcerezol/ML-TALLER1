@@ -1,20 +1,18 @@
-
-
-
-
 #Punto 4
-install.packages("officer", "flextable", "openxlsx", "huxtable")
-
-library(officer)
-library(flextable)
-library(openxlsx)
+install.packages("officer")
+install.packages("flextable")
+#"flextable", "openxlsx", "huxtable"
 library(huxtable)
 library(dplyr)
+library(officer)
+library(flextable)
+setwd("C:/Users/pcere/Dropbox/Machine Learning/ML-TALLER1/Views")
 ###############Corremos el modelo
 modelo2<-lm(log_Ing~female, data=GEIH_clean)
 summary(modelo2)
 tabla_reg <-huxreg(modelo2)
-#huxreg(modelo2)
+quick_docx(tabla_reg, file = "tabla_regs.docx")
+
 
 #############Bootstrap
 
@@ -58,27 +56,16 @@ SE2_fem <- function(GEIH_fem, index){
 }
 boot(data=GEIH_fem, SE2_fem, R=1000)
 
-
-###################
-library("tidyverse")
-library("dplyr")
-grafica_sexo<-data.frame()
-grafica_sexo<- GEIH_mas%>%{
-mutate(Fem=  predict(lm(log_Ing~age, data=GEIH_fem)))
-}
-
 ###################
 
 #### se crea el valor predicho del ingreso total es decir el "y gorro"
-library("ggplot2")
 
-ggplot()+geom_point(data=GEIH_mas , aes(x=age, y=predict(modelo2_mas)), colours="#69b3a2")+
-geom_point(data=GEIH_fem , aes(x=age, y=predict(modelo2_fem)))
 
-##################33
 
 ##########4.5.4
 
 modelo3<-lm(log_Ing~female+age+relab+formal+educ+p6426, data=GEIH_clean)
 summary(modelo3)
+tabla_reg <-huxreg(modelo3)
+quick_docx(tabla_reg, file = "tabla_reg41.docx")
 huxreg(modelo3)
