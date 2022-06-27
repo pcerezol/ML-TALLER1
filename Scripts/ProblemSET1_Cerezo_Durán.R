@@ -49,8 +49,9 @@ for (i in 1:10){
 #Dejamos mayores de edad y trabajadores
 
 GEIH_ocupados <- data.frame()
-GEIH_ocupados <- subset(GEIH, age>=18 & ocu==1)
+GEIH_ocupados <- subset(GEIH, age>=18 & ocu==1 & ingtot>0)
 GEIH_ocupados <- drop_na(GEIH_ocupados, ingtot)
+summary(GEIH_ocupados$ingtot)
 #Creamos interacciones de variables de interés
 
 GEIH_ocupados <- GEIH_ocupados %>%
@@ -61,6 +62,7 @@ GEIH_ocupados <- GEIH_ocupados %>%
          formal_sex = formal*sex,
          realb_sex = relab*sex,
   )
+summary(GEIH_ocupados$log_Ing)
 
 #Creamos el df con las variables de interés
 
@@ -79,16 +81,20 @@ GEIH_clean <- subset(GEIH_ocupados, select = c ( Var.1, dominio, sex, ingtot, ag
 
 GEIH_clean <- GEIH_clean  %>% 
 
-  mutate(educ=0, 
-         female = sex + 1)
+  mutate(educ=0,
+         female=sex+1,
+         female = replace (female, sex == 1, 0),
+         female = replace (female, sex == 2, 1)
+         )
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 4] <- 5
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 5] <- 10
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 6] <- 11
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 7] <- 15
-GEIH_clean['female'][GEIH_clean['sex'] == 2] <- 0
 
+
+summary(GEIH_clean$female)
 #Creamos educ al cuadrado
   GEIH_clean <- GEIH_clean  %>% 
   mutate(educ2=educ^2)

@@ -1,4 +1,6 @@
-#Punto 4
+#####################
+     #Punto 4#
+#####################
 install.packages("officer")
 install.packages("flextable")
 #"flextable", "openxlsx", "huxtable"
@@ -7,34 +9,22 @@ library(dplyr)
 library(officer)
 library(flextable)
 library(boot)
+
+#Definimos el escritorio para sacar tablas y gráficas#
+
 setwd("C:/Users/pcere/Dropbox/Machine Learning/ML-TALLER1/Views")
-###############Corremos el modelo
-modelo2<-lm(log_Ing~female, data=GEIH_clean)
+
+#4.1 modelo simple log_Ing ~ female
+
+modelo2 <- lm(log_Ing~female, data=GEIH_clean)
 summary(modelo2)
 tabla_reg <-huxreg(modelo2)
 quick_docx(tabla_reg, file = "tabla_regs.docx")
 
+#4.3 Estimate and plot the predicted age-earnings profile by gender. 
 
-#############Bootstrap
-
-SE2 <- function(GEIH_clean, index){
-reg <- lm(log_Ing~female, data=GEIH_clean[index, ])
-  coef(reg)
-}
-boot(data=GEIH_clean, SE2, R=1000)
-
-
-
-
-
-
-
-
-
-
-###################
 #La base únicamente contiene información de Bogotá
-##############
+
 #Creamos sets de data solo con hombres y mujeres
 GEIH_mas<-subset(GEIH_clean, female==0)
 GEIH_fem<-subset(GEIH_clean, female==1)
@@ -59,46 +49,52 @@ SE2_fem <- function(GEIH_fem, index){
 }
 boot(data=GEIH_fem, SE2_fem, R=1000)
 
-###############
-#Creamos una tabla para comparar los dos modelos#
+#Creamos una tabla para comparar los dos modelos
 tabla_mas_fem <-huxreg("Hombres" = modelo2_mas,
                        "Mujeres" = modelo2_fem)
 quick_docx(tabla_mas_fem, file = "tabla_mas_fem.docx")
 
+#Sacamos la gráfica fachera de comparación
+ggplot()+geom_point(data=GEIH_mas , aes(x=age, y=predict(modelo2_mas), color = "Hombres" ))+
+  geom_point(data=GEIH_fem , aes(x=age, y=predict(modelo2_fem), color = "Mujeres"))+
+  theme(panel.background = element_rect(fill = "white"))+
+  labs(y= "Log(Ingreso Total)", x = "Edad")+
+  theme(legend.title = element_blank())
 
-###################
-
-#### se crea el valor predicho del ingreso total es decir el "y gorro"
 
 
+#4############Bootstrap
 
-##########4.5.4
+SE2 <- function(GEIH_clean, index){
+  reg <- lm(log_Ing~female, data=GEIH_clean[index, ])
+  coef(reg)
+}
+boot(data=GEIH_clean, SE2, R=1000)
 
+##########4.5
+#4.5 (a) Regresión con múltiples controles
 modelo3<-lm(log_Ing~female+age+relab+formal+educ+p6426, data=GEIH_clean)
 summary(modelo3)
+#sacamos la tabla
 tabla_reg <-huxreg(modelo3)
 quick_docx(tabla_reg, file = "tabla_reg41.docx")
-huxreg(modelo3)
 
 
-############ 4.5.5
-#TML
-#Comenzamos encontrando la matriz aniquiladora de los otros coeficientes
-matriz1 <- as.matrix(subset(GEIH_clean, select = c( age, relab, formal, educ, p6426)))
-matriz1T <- t(matriz1)
-matrizXTX <- matriz1T %*% matriz1
-matrizXTX_inv <- solve(matrizXTX)
-matrizPx <- matriz1 %*% matrizXTX_inv %*% matriz1T
-Identidad <- diag(16277)
-matriz_aniq <-Identidad - matrizPx
-#Hacemos la transformación a Y y variables de interés
-NASH <- as.matrix(subset(GEIH_clean, select = c (log_Ing)))
-Y_aniq <- matriz_aniq %*% NASH
 
-summary(Y_aniq)
-XB2 <- as.matrix(subset(GEIH_clean, select = c (female)))
-XB2_aniq <- matriz_aniq %*% XB2
-summary(XB2)
+#4.5 (b) Demostración del teorema FWL
 
-TMLmatriz <- cbind(Y_aniq, XB2)
-TML <- as.data.frame((TMLmatriz))
+#FWL con residuales
+#Guardamos los resiguales de log_Inc en los controles
+resi_dente <- residuals(lm(log_Ing ~ age+relab+formal+educ+p6426, GEIH_clean))
+
+#Guardamos los resiguales de female en los controles
+female_resi <- residuals(lm(female ~ relab+formal+educ+p6426, GEIH_clean))
+
+#Corremos la regresión con transofrmaciones
+FWL_funcional <- lm(resi_dente ~ female_resi, GEIH_clean)
+summary(FWL_funcional)
+
+#Sacamos la tabla
+tabla_FWL <-huxreg("Modelo completo" = modelo3,
+                   "FWL" = FWL_funcional)
+quick_docx(tabla_FWL, file = "tabla_regFWL.docx")
