@@ -78,7 +78,7 @@ GEIH_ocupados <- GEIH_ocupados %>%
 
 ###codificación de nombre de variables
 
-GEIH_ocupados <- GEIH_ocupados %>%
+GEIH_clean <- GEIH_clean %>%
   rename(tiempo_tra = p6426, tipo_ocu  = relab, urbano = clase)  
 
 
@@ -97,6 +97,13 @@ summary(GEIH_clean$female)
 GEIH_clean['female'][GEIH_clean['female'] == 2] <- 0
 
 
+####################################################################
+
+
+GEIH_clean<-GEIH_clean%>%
+  mutate(tiempo_tra2 = tiempo_tra^2)
+
+
 #creamos tiempo de estudio de la persona de acuerdo con el
 # nivel de educaciÃ³n alcanzado
 
@@ -105,10 +112,10 @@ GEIH_clean['female'][GEIH_clean['female'] == 2] <- 0
 
 GEIH_clean <- GEIH_clean  %>% 
   
-  mutate(educ=0
+  mutate(educ=0,
          age_female=age*female,
          age_female2=age2*female
-  ))
+  )
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 4] <- 5
@@ -391,16 +398,90 @@ summary(modelo3)
 #you estimated before. Discuss the model with the lowest average prediction error.
 
 
+modelo4 <-lm(ingtot~female+age+age2,  data=GEIH_clean )
 
-Para leverage
+summary(modelo4)
+
+modelo5<- lm(ingtot~female+age+age2+ tipo_ocu,  data=GEIH_clean)
+
+summary(modelo5)
+
+modelo6 <- lm(ingtot~female+age+age2+tipo_ocu+formal, data=GEIH_clean)
+
+summary(modelo6)
+
+modelo7<- lm(ingtot~female+age+age2+tipo_ocu+formal+educ+educ2 + realb_sex, data=GEIH_clean )
+
+summary(modelo7)
+               
+modelo8<- lm(ingtot~female+age+age2+tipo_ocu+formal+educ+educ2+ tiempo_tra+ tiempo_tra2 + formal_sex + realb_sex+age_sex + age_sex2, data=GEIH_clean)
+
+summary(modelo8)
+
+##########para modelo 4
+
+data_errores <- data.frame(pred = predict(modelo4), actual = GEIH_clean$ingtot)
+
+mean((data_errores$actual - data_errores$pred)^2)
+
+
+###########para modelo 5
+
+data_errores2 <- data.frame(pred = predict(modelo5), actual = GEIH_clean$ingtot)
+
+mean((data_errores2$actual - data_errores2$pred)^2)
+
+
+###########para modelo 6
+
+data_errores3 <- data.frame(pred = predict(modelo6), actual = GEIH_clean$ingtot)
+
+mean((data_errores3$actual - data_errores3$pred)^2)
+
+###########para modelo 7
+
+
+data_errores4 <- data.frame(pred = predict(modelo7), actual = GEIH_clean$ingtot)
+
+mean((data_errores4$actual - data_errores4$pred)^2)
+
+###########para modelo 8
+
+data_errores5 <- data.frame(pred = predict(modelo8), actual = GEIH_clean$ingtot)
+
+mean((data_errores5$actual - data_errores5$pred)^2)
+
+
+##display leverage stats for each observation
+
+summary(test)
+
+modelo9 <- lm(ingtot~female+age+age2+tipo_ocu+formal+educ+educ2+ tiempo_tra+ tiempo_tra2 + formal_sex + realb_sex+age_sex + age_sex2, data=test)
+
+summary(modelo9)
 
 ######calculate leverage for each observation in the model
-hats <- as.data.frame(hatvalues(model))
 
-#display leverage stats for each observation
+hats <- as.data.frame(hatvalues(modelo9))
+
+hats
+
+head(hats)
+tail(hats)
 
 
-######################################################
+
+#### K-fold cross-validation
+
+install.packages("caret")
+
+library(caret)
+
+ctrl <- traincontrol(method = "cv", number = 5)
+
+model10 <- train(ingtot~female+age+age2+tipo_ocu+formal+educ+educ2+tiempo_tra+tiempo_tra2 + formal_sex + realb_sex+age_sex + age_sex2, data=test, method ="lm", trControl = crtl)
+  
+
 
 
 
