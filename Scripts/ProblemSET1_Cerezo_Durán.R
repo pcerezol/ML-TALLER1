@@ -58,34 +58,33 @@ GEIH_ocupados <- GEIH_ocupados %>%
   mutate(age2 = age^2,
          age_sex = age*sex,
          age_sex2 = age2*sex,
-         log_Ing = log(ingtot),
-         formal_sex = formal*sex,
-         realb_sex = relab*sex,
+         log_Ing = log(ingtot)
+
   )
 summary(GEIH_ocupados$log_Ing)
 
 #Creamos el df con las variables de interés
 
-GEIH_clean <- subset(GEIH_ocupados, select = c ( Var.1, dominio, sex, ingtot, age, age2, 
+GEIH_clean <- subset(GEIH_ocupados, select = c ( dominio, sex, ingtot, age, age2, 
                                                 age_sex, age_sex2, formal,
                                                 relab,maxEducLevel, depto,
-                                                clase, p6426, log_Ing, formal_sex,
-                                                realb_sex))
-
+                                                clase, p6426, log_Ing))
 
 #creamos tiempo de estudio de la persona de acuerdo con el
 # nivel de educación alcanzado
 
 
 ###para remplazar los datos de una teniendo en cuenta otra variable GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
-
+GEIH_clean <- GEIH_clean %>%
+  rename(tiempo_tra = p6426, tipo_ocu  = relab, urbano = clase)
 GEIH_clean <- GEIH_clean  %>% 
-
   mutate(educ=0,
          female=sex+1,
          female = replace (female, sex == 1, 0),
-         female = replace (female, sex == 2, 1)
-         )
+         female = replace (female, sex == 2, 1),
+         formal_female = formal * female,
+         tipo_ocu_female = tipo_ocu * female,
+         tiempo_tra_female = tiempo_tra * female)
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 4] <- 5
@@ -93,13 +92,11 @@ GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 5] <- 10
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 6] <- 11
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 7] <- 15
 
-
-summary(GEIH_clean$female)
 #Creamos educ al cuadrado
-  GEIH_clean <- GEIH_clean  %>% 
+GEIH_clean <- GEIH_clean  %>% 
   mutate(educ2=educ^2)
   
-summary(GEIH_clean$educ2)
+
 
 #### estad?sticas descriptivas
 
