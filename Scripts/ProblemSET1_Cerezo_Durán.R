@@ -84,7 +84,9 @@ GEIH_clean <- GEIH_clean  %>%
          female = replace (female, sex == 2, 1),
          formal_female = formal * female,
          tipo_ocu_female = tipo_ocu * female,
-         tiempo_tra_female = tiempo_tra * female)
+         tiempo_tra_female = tiempo_tra * female,
+         tiempo_tra2 = tiempo_tra^2,
+         female_educ = female * educ)
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 4] <- 5
