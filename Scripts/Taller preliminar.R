@@ -38,7 +38,7 @@ library(boot) ###bootstrap
 library(skimr)  #estadísticas descriptivas
 library(descr) ###tablas cruzadas
 library(tableone) #descriptivas
-
+library(lattice)
 #Cargamos la data--------------------------------------
 GEIH <- data.frame()
 for (i in 1:10){
@@ -477,13 +477,25 @@ install.packages("caret")
 
 library(caret)
 
-ctrl <- traincontrol(method = "cv", number = 5)
+ctrl <- trainControl(method = "cv", number = 5)
 
-model10 <- train(ingtot~female+age+age2+tipo_ocu+formal+educ+educ2+tiempo_tra+tiempo_tra2 + formal_sex + realb_sex+age_sex + age_sex2, data=test, method ="lm", trControl = crtl)
+
+model14 <- train(ingtot~female+age+age2, data=test, method ="lm", trControl = ctrl)
+
+model13 <- train(ingtot~female+age+age2+ tipo_ocu, data=test, method ="lm", trControl = ctrl)
+
+model12 <- train(ingtot~female+age+age2+tipo_ocu+formal,data=test, method ="lm", trControl = ctrl)
+
+model11 <- train(ingtot~female+age+age2+tipo_ocu+formal+educ+educ2 + realb_sex, data=test, method ="lm", trControl = ctrl)
+
+model10 <- train(ingtot~female+age+age2+tipo_ocu+formal+educ+educ2+tiempo_tra+tiempo_tra2 + formal_sex + realb_sex+age_sex + age_sex2, data=test, method ="lm", trControl = ctrl)
   
 
-
-
+print(model10)
+print(model14)
+print(model13)
+print(model12)
+print(model11)
 
 
 
