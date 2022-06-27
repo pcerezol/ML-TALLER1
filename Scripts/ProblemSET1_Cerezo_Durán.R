@@ -48,9 +48,9 @@ for (i in 1:10){
 
 #Dejamos mayores de edad y trabajadores
 
-GEIH_ocupados<-data.frame()
-GEIH_ocupados<-subset(GEIH, age>=18 & ocu==1)
-
+GEIH_ocupados <- data.frame()
+GEIH_ocupados <- subset(GEIH, age>=18 & ocu==1)
+GEIH_ocupados <- drop_na(GEIH_ocupados, ingtot)
 #Creamos interacciones de variables de interÃ©s
 
 GEIH_ocupados <- GEIH_ocupados %>%
@@ -79,14 +79,15 @@ GEIH_clean <- subset(GEIH_ocupados, select = c ( Var.1, dominio, sex, ingtot, ag
 
 GEIH_clean <- GEIH_clean  %>% 
 
-  mutate(educ=0)
+  mutate(educ=0, 
+         female = sex + 1)
 
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 3] <- 4
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 4] <- 5
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 5] <- 10
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 6] <- 11
 GEIH_clean['educ'][GEIH_clean['maxEducLevel'] == 7] <- 15
-
+GEIH_clean['female'][GEIH_clean['sex'] == 2] <- 0
 
 #Creamos educ al cuadrado
   GEIH_clean <- GEIH_clean  %>% 
@@ -191,7 +192,7 @@ levels(GEIH_clean$educ) <- list("0" = "Ninguno",
                                 "11" = "Secundaria_com",
                                 "15" = "Educacion_sup")
 
-gráfica['educ'][GEIH_clean['educ'] == 0] <- ""
+gr?fica['educ'][GEIH_clean['educ'] == 0] <- ""
 
 
 
