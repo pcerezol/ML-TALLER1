@@ -223,8 +223,8 @@ table(GEIH_clean$educ)
 
 ##### se realiza el primer modelo
 
-modelo1 <- lm(ingtot ~ age + age2,
-              data = GEIH_clean) 
+modelo1 <- lm(ingtot ~ age + age2, data = GEIH_clean) 
+
 #### primer resumen de los valores que se generaron
 
 summary(modelo1)
